@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import GuideCard from '../components/GuideCard.vue'
+import RouteMap from '../components/RouteMap.vue'
 import { CATEGORIES } from '../data/categories'
 import { GUIDES, guidesByCategory } from '../data/guides'
 import type { Guide } from '../types/guide'
@@ -102,6 +103,10 @@ function filterTo(id: string) {
           <span class="filter__count">{{ item.count }}</span>
         </RouterLink>
       </nav>
+    </section>
+
+    <section v-if="activeId === 'route'" class="container route-map-section">
+      <RouteMap />
     </section>
 
     <section v-if="isGrouped" class="container region-archive">
@@ -229,6 +234,10 @@ function filterTo(id: string) {
 
 .filter.active .filter__count {
   color: rgba(169, 230, 218, 0.7);
+}
+
+.route-map-section {
+  margin-top: 48px;
 }
 
 .region-archive {
