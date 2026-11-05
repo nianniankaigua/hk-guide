@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import GuideCard from '../components/GuideCard.vue'
 import RouteMap from '../components/RouteMap.vue'
+import CharmBoard from '../components/CharmBoard.vue'
 import { CATEGORIES } from '../data/categories'
 import { GUIDES, guidesByCategory } from '../data/guides'
 import type { Guide } from '../types/guide'
@@ -107,6 +108,10 @@ function filterTo(id: string) {
 
     <section v-if="activeId === 'route'" class="container route-map-section">
       <RouteMap />
+    </section>
+
+    <section v-if="activeId === 'charm'" class="container charm-board-section">
+      <CharmBoard />
     </section>
 
     <section v-if="isGrouped" class="container region-archive">
@@ -237,6 +242,10 @@ function filterTo(id: string) {
 }
 
 .route-map-section {
+  margin-top: 48px;
+}
+
+.charm-board-section {
   margin-top: 48px;
 }
 

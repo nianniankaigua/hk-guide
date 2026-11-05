@@ -19,6 +19,11 @@ const router = createRouter({
       component: () => import('../views/GuideDetailView.vue'),
     },
     {
+      path: '/charms/:slug',
+      name: 'charm-detail',
+      component: () => import('../views/CharmDetailView.vue'),
+    },
+    {
       path: '/search',
       name: 'search',
       component: () => import('../views/SearchView.vue'),
