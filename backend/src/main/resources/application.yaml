@@ -1,0 +1,39 @@
+# =============================================
+# HK Guide — 应用配置
+# =============================================
+
+spring:
+  application:
+    name: hk-guide
+
+  # ── 数据库 ──
+  datasource:
+    url: jdbc:mysql://localhost:3306/hk_guide?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:123456}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  # ── 启动时自动执行建表脚本（幂等）──
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+
+# ── 服务端口 ──
+server:
+  port: ${SERVER_PORT:8080}
+
+# ── MyBatis-Plus ──
+mybatis-plus:
+  type-aliases-package: com.hkguide.entity
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      id-type: auto
+
+# ── JWT ──
+app:
+  jwt:
+    secret: ${JWT_SECRET:HkGuide2026DevSecretKeyForJWTTokenGenerationPleaseChange}
+    expiration-ms: ${JWT_EXPIRATION_MS:604800000}   # 7 天

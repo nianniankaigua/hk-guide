@@ -12,6 +12,11 @@ const props = defineProps<{ guide: Guide }>()
 const category = computed(() => getCategory(props.guide.category))
 const accent = computed(() => props.guide.theme?.accent ?? '#a9e6da')
 const backdrop = computed(() => props.guide.backdrop ?? backdropFor(props.guide.slug))
+const badgeList = computed(() => {
+  const badge = props.guide.badge
+  if (!badge) return []
+  return Array.isArray(badge) ? badge : [badge]
+})
 
 function handleEnter() {
   if (backdrop.value) previewBackdrop(backdrop.value, accent.value)
@@ -54,7 +59,24 @@ function handleLeave() {
 
       <span class="card-cover__cat">{{ category.name }}</span>
       <span class="card-cover__glyph">
-        <CategoryGlyph :category="guide.category" :size="34" />
+        <template v-if="badgeList.length">
+          <img
+            v-for="badge in badgeList"
+            :key="badge"
+            class="card-cover__badge"
+            :src="badge"
+            alt=""
+            aria-hidden="true"
+          />
+        </template>
+        <img
+          v-else-if="guide.category === 'boss'"
+          class="card-cover__badge"
+          src="/badges/knight.png"
+          alt=""
+          aria-hidden="true"
+        />
+        <CategoryGlyph v-else :category="guide.category" :size="34" />
       </span>
 
       <span v-if="guide.difficulty" class="card-cover__difficulty" :aria-label="`难度 ${guide.difficulty} / 5`">
@@ -186,8 +208,24 @@ function handleLeave() {
   position: absolute;
   left: 20px;
   bottom: 18px;
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
   color: color-mix(in srgb, var(--card-accent) 55%, transparent);
   transition: color 0.45s, transform 0.45s;
+}
+
+.card-cover__badge {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  opacity: 0.75;
+  transition: opacity 0.45s, transform 0.45s;
+}
+
+.guide-card:hover .card-cover__badge {
+  opacity: 1;
+  transform: translateY(-2px);
 }
 
 .guide-card:hover .card-cover__glyph {

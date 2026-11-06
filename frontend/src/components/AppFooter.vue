@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import KnightSigil from './KnightSigil.vue'
 import { CATEGORIES } from '../data/categories'
 </script>
 
@@ -8,7 +7,7 @@ import { CATEGORIES } from '../data/categories'
     <div class="container footer-main">
       <div class="footer-brand">
         <div class="footer-brand__row">
-          <KnightSigil :size="34" />
+          <img class="footer-brand__img" src="/badges/knight.png" alt="圣巢档案" />
           <div>
             <p class="footer-cn">圣巢档案</p>
             <p class="footer-en">HALLOWNEST ARCHIVE</p>
@@ -64,6 +63,12 @@ import { CATEGORIES } from '../data/categories'
   display: flex;
   align-items: center;
   gap: 16px;
+}
+
+.footer-brand__img {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
 }
 
 .footer-cn {

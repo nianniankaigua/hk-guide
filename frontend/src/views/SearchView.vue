@@ -3,8 +3,9 @@ import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import CategoryGlyph from '../components/CategoryGlyph.vue'
 import { getCategory } from '../data/categories'
-import { GUIDES } from '../data/guides'
+import { api } from '../api'
 import { formatDate } from '../utils/format'
+import type { Guide } from '../types/guide'
 
 const route = useRoute()
 const router = useRouter()
@@ -12,7 +13,30 @@ const router = useRouter()
 const keyword = ref(String(route.query.q ?? ''))
 const submitted = computed(() => String(route.query.q ?? '').trim())
 
-const suggestions = ['螳螂领主', '护符', '112%', '神居', '钢魂', '结局', '苦痛之路']
+const suggestions = ['螳螂领主', '护符', '面具碎片', '神居', '钢魂', '结局', '苦痛之路']
+
+const results = ref<Guide[]>([])
+const searching = ref(false)
+const failed = ref(false)
+
+/** 后端全文检索：标题/副标题/摘要/标签/正文 */
+async function runSearch() {
+  const query = submitted.value
+  if (!query) {
+    results.value = []
+    return
+  }
+  searching.value = true
+  failed.value = false
+  try {
+    results.value = await api<Guide[]>(`/guides/search?q=${encodeURIComponent(query)}`)
+  } catch {
+    results.value = []
+    failed.value = true
+  } finally {
+    searching.value = false
+  }
+}
 
 watch(
   () => route.query.q,
@@ -21,16 +45,7 @@ watch(
   },
 )
 
-const results = computed(() => {
-  const query = submitted.value.toLowerCase()
-  if (!query) return []
-  return GUIDES.filter((guide) =>
-    [guide.title, guide.subtitle, guide.summary, guide.tags.join(' '), guide.content]
-      .join(' ')
-      .toLowerCase()
-      .includes(query),
-  )
-})
+watch(submitted, runSearch, { immediate: true })
 
 function search(term?: string) {
   const value = (term ?? keyword.value).trim()
@@ -81,7 +96,17 @@ function search(term?: string) {
         找到 <span>{{ results.length }}</span> 条与「{{ submitted }}」相关的档案
       </p>
 
-      <div v-if="results.length" class="result-list">
+      <div v-if="searching" class="idle">
+        <p class="idle__hint">正在检索…</p>
+      </div>
+
+      <div v-else-if="failed" class="empty">
+        <span class="empty__char">!</span>
+        <p class="empty__text">检索失败，确认后端已启动后重试。</p>
+        <button class="btn" type="button" @click="runSearch">重试</button>
+      </div>
+
+      <div v-else-if="results.length" class="result-list">
         <RouterLink
           v-for="guide in results"
           :key="guide.id"

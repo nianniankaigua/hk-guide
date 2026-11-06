@@ -1,24 +1,32 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import GuideCard from '../components/GuideCard.vue'
 import KnightSigil from '../components/KnightSigil.vue'
 import CategoryGlyph from '../components/CategoryGlyph.vue'
 import { CATEGORIES, getCategory } from '../data/categories'
-import { GUIDES, featuredGuides, latestGuides } from '../data/guides'
+import { useGuides } from '../composables/useGuides'
 import { formatCount, formatDate } from '../utils/format'
 
-const featured = featuredGuides()
-const latest = latestGuides(5)
+const { guides, loadGuides } = useGuides()
+
+onMounted(() => loadGuides())
+
+const featured = computed(() => guides.value.filter((guide) => guide.featured))
+const latest = computed(() =>
+  [...guides.value].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)).slice(0, 5),
+)
 
 const categories = computed(() =>
   CATEGORIES.map((cat) => ({
     ...cat,
-    count: GUIDES.filter((guide) => guide.category === cat.id).length,
+    count: guides.value.filter((guide) => guide.category === cat.id).length,
   })),
 )
 
-const totalViews = GUIDES.reduce((sum, guide) => sum + guide.views, 0)
-const lastUpdated = GUIDES.map((guide) => guide.updatedAt).sort().slice(-1)[0] ?? ''
+const totalViews = computed(() => guides.value.reduce((sum, guide) => sum + guide.views, 0))
+const lastUpdated = computed(
+  () => guides.value.map((guide) => guide.updatedAt).sort().slice(-1)[0] ?? '',
+)
 </script>
 
 <template>
@@ -36,7 +44,7 @@ const lastUpdated = GUIDES.map((guide) => guide.updatedAt).sort().slice(-1)[0] ?
 
           <p class="hero-desc reveal reveal-delay-2">
             在废墟之下，所有道路都通向同一个王座。<br />
-            写给每一个还在圣巢里迷路的人：BOSS 打法、护符搭配、流程路线，以及那 112%。
+            写给每一个还在圣巢里迷路的人：BOSS 打法、护符搭配、流程路线，以及最后的完成度。
           </p>
 
           <div class="hero-actions reveal reveal-delay-3">
@@ -51,7 +59,7 @@ const lastUpdated = GUIDES.map((guide) => guide.updatedAt).sort().slice(-1)[0] ?
 
           <div class="hero-stats reveal reveal-delay-4">
             <div class="hero-stat">
-              <strong>{{ GUIDES.length }}</strong>
+              <strong>{{ guides.length }}</strong>
               <span>篇档案</span>
             </div>
             <div class="hero-stat">

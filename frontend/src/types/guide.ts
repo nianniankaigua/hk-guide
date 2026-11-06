@@ -19,6 +19,8 @@ export interface Guide {
   watermark: string
   /** 从游戏资源中提取的 BOSS 立绘，放在 public/covers 下 */
   cover?: string
+  /** DLC 徽章图标（寻神者/格林剧团/隐藏的梦），放在 public/badges 下，优先于分类图标显示；双归属可传数组 */
+  badge?: string | string[]
   /** 场景截图，用作卡片与页面背景；默认按 slug 自动匹配 src/assets/backdrops */
   backdrop?: string
   /** 每个 BOSS 的专属强调色 */

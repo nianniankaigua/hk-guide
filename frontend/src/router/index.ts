@@ -29,6 +29,26 @@ const router = createRouter({
       component: () => import('../views/SearchView.vue'),
     },
     {
+      path: '/forum',
+      name: 'forum',
+      component: () => import('../views/ForumView.vue'),
+    },
+    {
+      path: '/forum/:id',
+      name: 'forum-detail',
+      component: () => import('../views/ForumDetailView.vue'),
+    },
+    {
+      path: '/auth',
+      name: 'auth',
+      component: () => import('../views/AuthView.vue'),
+    },
+    {
+      path: '/favorites',
+      name: 'favorites',
+      component: () => import('../views/FavoritesView.vue'),
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: 'not-found',
       component: () => import('../views/NotFoundView.vue'),

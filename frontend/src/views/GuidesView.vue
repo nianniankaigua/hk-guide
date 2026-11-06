@@ -1,14 +1,17 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import GuideCard from '../components/GuideCard.vue'
 import RouteMap from '../components/RouteMap.vue'
 import CharmBoard from '../components/CharmBoard.vue'
 import { CATEGORIES } from '../data/categories'
-import { GUIDES, guidesByCategory } from '../data/guides'
+import { useGuides } from '../composables/useGuides'
 import type { Guide } from '../types/guide'
 
 const route = useRoute()
+const { guides: allGuides, loading, failed, loadGuides } = useGuides()
+
+onMounted(() => loadGuides())
 
 const activeId = computed(() =>
   typeof route.query.category === 'string' ? route.query.category : '',
@@ -16,17 +19,18 @@ const activeId = computed(() =>
 const activeCategory = computed(() => CATEGORIES.find((cat) => cat.id === activeId.value))
 
 const guides = computed(() =>
-  (activeId.value ? guidesByCategory(activeId.value) : [...GUIDES]).sort((a, b) =>
-    b.updatedAt.localeCompare(a.updatedAt),
-  ),
+  (activeId.value
+    ? allGuides.value.filter((guide) => guide.category === activeId.value)
+    : [...allGuides.value]
+  ).sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)),
 )
 
 const filters = computed(() => [
-  { id: '', name: '全部', count: GUIDES.length },
+  { id: '', name: '全部', count: allGuides.value.length },
   ...CATEGORIES.map((cat) => ({
     id: cat.id,
     name: cat.name,
-    count: GUIDES.filter((guide) => guide.category === cat.id).length,
+    count: allGuides.value.filter((guide) => guide.category === cat.id).length,
   })),
 ])
 
@@ -106,6 +110,17 @@ function filterTo(id: string) {
       </nav>
     </section>
 
+    <section v-if="loading" class="container empty">
+      <p class="empty__text">正在读取档案…</p>
+    </section>
+
+    <section v-else-if="failed" class="container empty">
+      <p class="empty__char">!</p>
+      <p class="empty__text">档案库读取失败，确认后端已启动后重试。</p>
+      <button class="btn" type="button" @click="loadGuides(true)">重试</button>
+    </section>
+
+    <template v-else>
     <section v-if="activeId === 'route'" class="container route-map-section">
       <RouteMap />
     </section>
@@ -147,6 +162,7 @@ function filterTo(id: string) {
       <p class="empty__text">这个分类还没有档案，先看看其他内容吧。</p>
       <RouterLink to="/guides" class="btn">返回全部攻略</RouterLink>
     </section>
+    </template>
   </div>
 </template>
 

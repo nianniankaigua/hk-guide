@@ -1,11 +1,17 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import KnightSigil from './KnightSigil.vue'
 import { CATEGORIES } from '../data/categories'
+import { useAuth } from '../stores/auth'
 
 const route = useRoute()
 const router = useRouter()
+const { state: auth, isLoggedIn, logout } = useAuth()
+
+function handleLogout() {
+  logout()
+  if (route.path === '/favorites') router.push('/')
+}
 
 const keyword = ref('')
 const scrolled = ref(false)
@@ -17,9 +23,11 @@ const navItems = [
     name: cat.name.replace(' 攻略', '').replace('图鉴', '').replace('收集', '').replace('挑战', '').replace('流程', ''),
     to: { path: '/guides', query: { category: cat.id } },
   })),
+  { id: 'forum', name: '论坛', to: { path: '/forum' } },
 ]
 
 function isActive(id: string): boolean {
+  if (id === 'forum') return route.path.startsWith('/forum')
   if (id === 'all') return route.path === '/guides' && !route.query.category
   return route.path === '/guides' && route.query.category === id
 }
@@ -50,7 +58,7 @@ onBeforeUnmount(() => {
     <div class="container header-inner">
       <RouterLink to="/" class="brand" aria-label="返回首页">
         <span class="brand-mark">
-          <KnightSigil :size="18" />
+          <img class="brand-mark__img" src="/badges/knight.png" alt="圣巢档案" />
         </span>
         <span class="brand-copy">
           <span class="brand-cn">圣巢档案</span>
@@ -77,6 +85,20 @@ onBeforeUnmount(() => {
         </svg>
         <input v-model="keyword" type="search" placeholder="搜索攻略…" aria-label="搜索攻略" />
       </form>
+
+      <RouterLink v-if="!isLoggedIn" to="/auth" class="auth-entry">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+          <circle cx="12" cy="8" r="4" />
+          <path d="M4.5 20c1.6-3.4 4.2-5 7.5-5s5.9 1.6 7.5 5" />
+        </svg>
+        <span>登录</span>
+      </RouterLink>
+      <div v-else class="auth-area">
+        <RouterLink to="/favorites" class="auth-link" :class="{ active: route.path === '/favorites' }">
+          {{ auth.user?.nickname || auth.user?.username }}
+        </RouterLink>
+        <button type="button" class="auth-logout" @click="handleLogout">退出</button>
+      </div>
     </div>
   </header>
 </template>
@@ -121,14 +143,12 @@ onBeforeUnmount(() => {
   height: 36px;
   display: grid;
   place-items: center;
-  border: 1px solid var(--line-strong);
-  color: var(--bone);
-  transition: border-color 0.35s, box-shadow 0.35s;
 }
 
-.brand:hover .brand-mark {
-  border-color: rgba(169, 230, 218, 0.6);
-  box-shadow: 0 0 22px -6px rgba(169, 230, 218, 0.5);
+.brand-mark__img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
 }
 
 .brand-copy {
@@ -223,6 +243,56 @@ onBeforeUnmount(() => {
 
 .search input::-webkit-search-cancel-button {
   filter: invert(0.6);
+}
+
+.auth-entry {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  flex-shrink: 0;
+  font-size: 12.5px;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+  padding-block: 6px;
+  transition: color 0.3s;
+}
+
+.auth-entry:hover {
+  color: var(--bone);
+}
+
+.auth-area {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+}
+
+.auth-link {
+  font-size: 12.5px;
+  letter-spacing: 0.12em;
+  color: var(--soul);
+  padding-block: 6px;
+  transition: color 0.3s;
+}
+
+.auth-link:hover,
+.auth-link.active {
+  color: var(--bone);
+}
+
+.auth-logout {
+  border: 0;
+  background: transparent;
+  padding: 6px 0;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  color: var(--dim);
+  transition: color 0.3s;
+}
+
+.auth-logout:hover {
+  color: #d98f8f;
 }
 
 @media (max-width: 1040px) {

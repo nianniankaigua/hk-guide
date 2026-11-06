@@ -1,7 +1,18 @@
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import AppHeader from './components/AppHeader.vue'
 import AppFooter from './components/AppFooter.vue'
 import InkField from './components/InkField.vue'
+import { loadCategories } from './composables/useCategories'
+import { useGuides } from './composables/useGuides'
+
+const { loadGuides } = useGuides()
+
+// 应用启动时预取分类与攻略列表（后端不可用时页面用静态兜底/失败态）
+onMounted(() => {
+  loadCategories()
+  loadGuides()
+})
 </script>
 
 <template>

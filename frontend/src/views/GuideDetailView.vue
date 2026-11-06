@@ -1,18 +1,83 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import GuideCard from '../components/GuideCard.vue'
 import CategoryGlyph from '../components/CategoryGlyph.vue'
-import { findGuide, GUIDES } from '../data/guides'
 import { getCategory } from '../data/categories'
 import { backdropFor } from '../data/backdrops'
 import { clearBackdropPreview, setBaseBackdrop } from '../composables/useBackdrop'
+import { useGuides } from '../composables/useGuides'
 import { renderGuide } from '../utils/markdown'
 import { formatCount, formatDate } from '../utils/format'
+import { api, ApiError } from '../api'
+import { useAuth } from '../stores/auth'
+import type { Guide } from '../types/guide'
 
 const route = useRoute()
+const router = useRouter()
+const { isLoggedIn } = useAuth()
 
-const guide = computed(() => findGuide(String(route.params.slug)))
+const guide = ref<Guide | null>(null)
+const status = ref<'loading' | 'ok' | 'notfound' | 'failed'>('loading')
+
+const { guides: allGuides, loadGuides } = useGuides()
+
+async function loadGuide() {
+  status.value = 'loading'
+  try {
+    guide.value = await api<Guide>(`/guides/${route.params.slug}`)
+    status.value = 'ok'
+  } catch (error) {
+    guide.value = null
+    status.value = error instanceof ApiError && error.status === 404 ? 'notfound' : 'failed'
+  }
+}
+
+watch(() => route.params.slug, loadGuide, { immediate: true })
+
+const favorited = ref(false)
+const favoriteBusy = ref(false)
+
+async function refreshFavorite() {
+  favorited.value = false
+  if (!guide.value || !isLoggedIn.value) return
+  try {
+    const data = await api<{ slugs: string[] }>('/favorites')
+    favorited.value = data.slugs.includes(guide.value.slug)
+  } catch {
+    // 后端未启动或登录过期时保持未收藏状态
+  }
+}
+
+async function toggleFavorite() {
+  const current = guide.value
+  if (!current) return
+  if (!isLoggedIn.value) {
+    router.push({ path: '/auth', query: { redirect: route.fullPath } })
+    return
+  }
+  if (favoriteBusy.value) return
+  favoriteBusy.value = true
+  try {
+    if (favorited.value) {
+      await api(`/favorites/${current.slug}`, { method: 'DELETE' })
+      favorited.value = false
+    } else {
+      await api(`/favorites/${current.slug}`, { method: 'POST' })
+      favorited.value = true
+    }
+  } catch {
+    // 失败时保持原状态
+  } finally {
+    favoriteBusy.value = false
+  }
+}
+
+watch(
+  [() => guide.value?.slug, isLoggedIn],
+  refreshFavorite,
+  { immediate: true },
+)
 const category = computed(() => (guide.value ? getCategory(guide.value.category) : null))
 const rendered = computed(() =>
   guide.value ? renderGuide(guide.value.content) : { html: '', toc: [] },
@@ -21,8 +86,12 @@ const rendered = computed(() =>
 const related = computed(() => {
   const current = guide.value
   if (!current) return []
-  const sameCategory = GUIDES.filter((item) => item.category === current.category && item.id !== current.id)
-  const others = GUIDES.filter((item) => item.category !== current.category && item.id !== current.id)
+  const sameCategory = allGuides.value.filter(
+    (item) => item.category === current.category && item.id !== current.id,
+  )
+  const others = allGuides.value.filter(
+    (item) => item.category !== current.category && item.id !== current.id,
+  )
   return [...sameCategory, ...others].slice(0, 3)
 })
 
@@ -42,9 +111,11 @@ watch(
   { immediate: true },
 )
 
-const index = computed(() => GUIDES.findIndex((item) => item.id === guide.value?.id))
-const prevGuide = computed(() => (index.value > 0 ? GUIDES[index.value - 1] : null))
-const nextGuide = computed(() => (index.value >= 0 && index.value < GUIDES.length - 1 ? GUIDES[index.value + 1] : null))
+const index = computed(() => allGuides.value.findIndex((item) => item.id === guide.value?.id))
+const prevGuide = computed(() => (index.value > 0 ? allGuides.value[index.value - 1] : null))
+const nextGuide = computed(() =>
+  index.value >= 0 && index.value < allGuides.value.length - 1 ? allGuides.value[index.value + 1] : null,
+)
 
 const progress = ref(0)
 const activeHeading = ref('')
@@ -66,7 +137,10 @@ function attachScroll() {
   window.addEventListener('scroll', updateScrollState, { passive: true })
 }
 
-onMounted(attachScroll)
+onMounted(() => {
+  attachScroll()
+  loadGuides()
+})
 onBeforeUnmount(() => {
   window.removeEventListener('scroll', updateScrollState)
   clearBackdropPreview()
@@ -80,7 +154,17 @@ watch(guide, async () => {
 </script>
 
 <template>
-  <div v-if="guide" class="detail" :style="themeStyle">
+  <div v-if="status === 'loading'" class="notfound container">
+    <p class="notfound__text">正在读取档案…</p>
+  </div>
+
+  <div v-else-if="status === 'failed'" class="notfound container">
+    <span class="notfound__char">!</span>
+    <p class="notfound__text">档案读取失败，确认后端已启动后重试。</p>
+    <button class="btn btn--solid" type="button" @click="loadGuide">重试</button>
+  </div>
+
+  <div v-else-if="guide" class="detail" :style="themeStyle">
     <div class="read-progress" :style="{ transform: `scaleX(${progress})` }"></div>
 
     <section class="container detail-head">
@@ -128,6 +212,19 @@ watch(guide, async () => {
         <span>{{ formatCount(guide.views) }} 次阅读</span>
         <span class="meta-dot"></span>
         <span>{{ formatCount(guide.likes) }} 人收藏</span>
+
+        <button
+          type="button"
+          class="favorite-btn"
+          :class="{ active: favorited }"
+          :disabled="favoriteBusy"
+          @click="toggleFavorite"
+        >
+          <svg width="13" height="13" viewBox="0 0 24 24" :fill="favorited ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+            <path d="M12 21c-4.8-3.6-8.5-6.9-8.5-11A4.5 4.5 0 0 1 12 6.6 4.5 4.5 0 0 1 20.5 10c0 4.1-3.7 7.4-8.5 11Z" />
+          </svg>
+          {{ favorited ? '已收藏' : '收藏' }}
+        </button>
 
         <span v-if="guide.difficulty" class="meta-difficulty">
           难度
@@ -359,6 +456,36 @@ watch(guide, async () => {
   border-radius: 50%;
   background: var(--dim);
   opacity: 0.6;
+}
+
+.favorite-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-left: 14px;
+  padding: 5px 14px;
+  border: 1px solid var(--line);
+  background: transparent;
+  font-size: 11.5px;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  transition: color 0.3s, border-color 0.3s, background 0.3s;
+}
+
+.favorite-btn:hover {
+  color: var(--bone);
+  border-color: var(--line-strong);
+}
+
+.favorite-btn.active {
+  color: var(--soul);
+  border-color: rgba(169, 230, 218, 0.45);
+  background: var(--soul-soft);
+}
+
+.favorite-btn:disabled {
+  opacity: 0.55;
+  cursor: wait;
 }
 
 .meta-difficulty {
