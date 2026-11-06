@@ -97,6 +97,7 @@ onBeforeUnmount(() => {
         <RouterLink to="/favorites" class="auth-link" :class="{ active: route.path === '/favorites' }">
           {{ auth.user?.nickname || auth.user?.username }}
         </RouterLink>
+        <RouterLink to="/admin" class="auth-link" :class="{ active: route.path === '/admin' }">管理</RouterLink>
         <button type="button" class="auth-logout" @click="handleLogout">退出</button>
       </div>
     </div>

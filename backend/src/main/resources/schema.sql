@@ -70,3 +70,20 @@ CREATE TABLE IF NOT EXISTS hk_category (
     sort_order  INT          DEFAULT 0,
     PRIMARY KEY (id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS hk_charm (
+    id           BIGINT       NOT NULL,
+    slug         VARCHAR(64)  NOT NULL,
+    name         VARCHAR(64)  NOT NULL,
+    en           VARCHAR(120) DEFAULT NULL,
+    notches      INT          DEFAULT 0,
+    effect       TEXT         DEFAULT NULL,
+    lore         TEXT         DEFAULT NULL,
+    location     VARCHAR(500) DEFAULT NULL,
+    notes        TEXT         DEFAULT NULL,
+    icon         VARCHAR(200) DEFAULT NULL,
+    synergy      TEXT         DEFAULT NULL,
+    synergy_note VARCHAR(500) DEFAULT NULL,
+    PRIMARY KEY (id),
+    UNIQUE KEY uk_hk_charm_slug (slug)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;

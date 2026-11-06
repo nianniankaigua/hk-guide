@@ -40,6 +40,7 @@ public class ForumService {
         List<Post> posts = postMapper.selectList(new LambdaQueryWrapper<Post>()
                 .orderByDesc(Post::getCreatedAt));
         Map<Long, User> userMap = userMapOf(posts.stream().map(Post::getUserId).toList());
+        Map<Long, Long> commentCounts = commentCountMap();
         return posts.stream()
                 .map(post -> new PostSummary(
                         post.getId(),
@@ -47,7 +48,7 @@ public class ForumService {
                         excerpt(post.getContent()),
                         authorOf(userMap.get(post.getUserId())),
                         post.getCreatedAt(),
-                        commentCount(post.getId())))
+                        commentCounts.getOrDefault(post.getId(), 0L)))
                 .toList();
     }
 
@@ -106,10 +107,11 @@ public class ForumService {
         return user;
     }
 
-    private long commentCount(Long postId) {
-        Long count = commentMapper.selectCount(new LambdaQueryWrapper<Comment>()
-                .eq(Comment::getPostId, postId));
-        return count == null ? 0 : count;
+    private Map<Long, Long> commentCountMap() {
+        return postMapper.countCommentsByPost().stream()
+                .collect(Collectors.toMap(
+                        row -> ((Number) row.get("post_id")).longValue(),
+                        row -> ((Number) row.get("cnt")).longValue()));
     }
 
     private Map<Long, User> userMapOf(List<Long> userIds) {

@@ -27,5 +27,11 @@ export function useGuides() {
     }
   }
 
-  return { guides, loading, loaded, failed, loadGuides }
+  /** 管理端增删改后调用，强制刷新列表缓存 */
+  function invalidate() {
+    loaded.value = false
+    loadGuides(true)
+  }
+
+  return { guides, loading, loaded, failed, loadGuides, invalidate }
 }

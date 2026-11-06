@@ -1,15 +1,43 @@
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import GuideCard from '../components/GuideCard.vue'
-import KnightSigil from '../components/KnightSigil.vue'
 import CategoryGlyph from '../components/CategoryGlyph.vue'
 import { CATEGORIES, getCategory } from '../data/categories'
 import { useGuides } from '../composables/useGuides'
+import { api } from '../api'
 import { formatCount, formatDate } from '../utils/format'
+
+interface ForumPost {
+  id: number
+  title: string
+  author: string
+  createdAt: string
+  commentCount?: number
+}
 
 const { guides, loadGuides } = useGuides()
 
-onMounted(() => loadGuides())
+const posts = ref<ForumPost[]>([])
+
+async function loadPosts() {
+  try {
+    const data = await api<{ posts: ForumPost[] }>('/forum/posts')
+    posts.value = data.posts
+  } catch {
+    // 后端不可用时隐藏论坛区块
+  }
+}
+
+onMounted(() => {
+  loadGuides()
+  loadPosts()
+})
+
+/** 后端已按发布时间倒序，直接取前 5 */
+const latestPosts = computed(() => posts.value.slice(0, 5))
+const hotPosts = computed(() =>
+  [...posts.value].sort((a, b) => (b.commentCount ?? 0) - (a.commentCount ?? 0)).slice(0, 5),
+)
 
 const featured = computed(() => guides.value.filter((guide) => guide.featured))
 const latest = computed(() =>
@@ -77,16 +105,8 @@ const lastUpdated = computed(
           </div>
         </div>
 
-        <div class="hero-art reveal reveal-delay-2" aria-hidden="true">
-          <span class="hero-art__frame"></span>
-          <span class="hero-art__ring hero-art__ring--outer"></span>
-          <span class="hero-art__ring hero-art__ring--dashed"></span>
-          <span class="hero-art__ring hero-art__ring--inner"></span>
-          <KnightSigil :size="248" glow class="hero-art__sigil" />
-          <span class="hero-art__caption">
-            <i>THE HOLLOW KNIGHT</i>
-            <b>圣巢的幽灵</b>
-          </span>
+        <div class="hero-art reveal reveal-delay-2">
+          <img class="hero-art__poster" src="/poster.png" alt="Hollow Knight 海报：小骑士静坐崖边" />
         </div>
       </div>
     </section>
@@ -184,6 +204,62 @@ const lastUpdated = computed(
             <span class="latest-date">{{ formatDate(guide.updatedAt) }}</span>
             <span class="latest-arrow">→</span>
           </RouterLink>
+        </div>
+      </div>
+    </section>
+
+    <!-- 论坛 -->
+    <section v-if="posts.length" class="section">
+      <div class="container">
+        <div class="section-head">
+          <div class="section-head__title">
+            <span class="section-head__index">04 /</span>
+            <div>
+              <h2 class="section-head__cn">论坛热议</h2>
+              <span class="section-head__en">Forum Buzz</span>
+            </div>
+          </div>
+          <RouterLink to="/forum" class="section-link">进入论坛 →</RouterLink>
+        </div>
+
+        <div class="forum-grid">
+          <div class="forum-col">
+            <p class="forum-col__head">最新话题</p>
+            <RouterLink
+              v-for="(post, index) in latestPosts"
+              :key="`latest-${post.id}`"
+              :to="`/forum/${post.id}`"
+              class="forum-row"
+            >
+              <span class="forum-row__index">{{ String(index + 1).padStart(2, '0') }}</span>
+              <span class="forum-row__main">
+                <span class="forum-row__title">{{ post.title }}</span>
+                <span class="forum-row__meta">
+                  {{ post.author }} · {{ formatDate(post.createdAt.slice(0, 10)) }}
+                </span>
+              </span>
+              <span class="forum-row__arrow">→</span>
+            </RouterLink>
+          </div>
+
+          <div class="forum-col">
+            <p class="forum-col__head">最热讨论</p>
+            <RouterLink
+              v-for="(post, index) in hotPosts"
+              :key="`hot-${post.id}`"
+              :to="`/forum/${post.id}`"
+              class="forum-row"
+            >
+              <span class="forum-row__index forum-row__index--hot">
+                {{ String(index + 1).padStart(2, '0') }}
+              </span>
+              <span class="forum-row__main">
+                <span class="forum-row__title">{{ post.title }}</span>
+                <span class="forum-row__meta">{{ post.author }} · {{ post.commentCount ?? 0 }} 条评论</span>
+              </span>
+              <span class="forum-row__arrow">→</span>
+            </RouterLink>
+          </div>
         </div>
       </div>
     </section>
@@ -304,103 +380,21 @@ const lastUpdated = computed(
   color: var(--dim);
 }
 
-/* 徽记 */
+/* 海报 */
 
 .hero-art {
-  position: relative;
   width: 100%;
-  max-width: 460px;
-  aspect-ratio: 1;
+  max-width: 420px;
   margin-inline: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
-.hero-art::before {
-  content: '';
-  position: absolute;
-  inset: 8%;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(169, 230, 218, 0.12), transparent 66%);
-  filter: blur(10px);
-}
-
-.hero-art__frame {
-  position: absolute;
-  inset: 0;
+.hero-art__poster {
+  display: block;
+  width: 100%;
+  height: auto;
   border: 1px solid var(--line);
-  opacity: 0.7;
-  background:
-    linear-gradient(90deg, var(--soul) 0 18px, transparent 18px) top left / 100% 1px no-repeat,
-    linear-gradient(180deg, var(--soul) 0 18px, transparent 18px) top left / 1px 100% no-repeat,
-    linear-gradient(270deg, var(--soul) 0 18px, transparent 18px) bottom right / 100% 1px no-repeat,
-    linear-gradient(0deg, var(--soul) 0 18px, transparent 18px) bottom right / 1px 100% no-repeat;
-  opacity: 0.45;
-}
-
-.hero-art__ring {
-  position: absolute;
-  border-radius: 50%;
-  pointer-events: none;
-}
-
-.hero-art__ring--outer {
-  width: 86%;
-  height: 86%;
-  border: 1px solid var(--line-strong);
-}
-
-.hero-art__ring--dashed {
-  width: 70%;
-  height: 70%;
-  border: 1px dashed rgba(169, 230, 218, 0.22);
-  animation: spin-slow 70s linear infinite;
-}
-
-.hero-art__ring--inner {
-  width: 52%;
-  height: 52%;
-  border: 1px solid rgba(233, 240, 236, 0.08);
-}
-
-@keyframes spin-slow {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.hero-art__sigil {
-  position: relative;
-  z-index: 2;
-  animation: drift 9s ease-in-out infinite;
-}
-
-.hero-art__caption {
-  position: absolute;
-  bottom: 2%;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  white-space: nowrap;
-}
-
-.hero-art__caption i {
-  font-style: normal;
-  font-size: 8.5px;
-  letter-spacing: 0.36em;
-  color: var(--dim);
-}
-
-.hero-art__caption b {
-  font-family: var(--font-display);
-  font-weight: 400;
-  font-size: 11px;
-  letter-spacing: 0.24em;
-  color: var(--muted);
+  border-radius: 10px;
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.5);
 }
 
 /* ---------- 精选 ---------- */
@@ -614,6 +608,83 @@ const lastUpdated = computed(
   transform: translateX(4px);
 }
 
+/* ---------- 论坛 ---------- */
+
+.forum-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 56px;
+}
+
+.forum-col__head {
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  color: var(--muted);
+}
+
+.forum-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+  transition: transform 0.3s ease;
+}
+
+.forum-row:hover {
+  transform: translateX(6px);
+}
+
+.forum-row__index {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--dim);
+}
+
+.forum-row__index--hot {
+  color: var(--soul);
+}
+
+.forum-row__main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.forum-row__title {
+  font-size: 14.5px;
+  color: var(--bone);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.forum-row__meta {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--dim);
+}
+
+.forum-row__arrow {
+  color: var(--dim);
+  transition: color 0.3s;
+}
+
+.forum-row:hover .forum-row__arrow {
+  color: var(--soul);
+}
+
+@media (max-width: 900px) {
+  .forum-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+
 /* ---------- 结尾 ---------- */
 
 .closing {
@@ -674,9 +745,6 @@ const lastUpdated = computed(
   .hero-art {
     max-width: 320px;
     order: -1;
-  }
-  .hero-title__cn {
-    font-size: clamp(56px, 12vw, 84px);
   }
   .hero-stats {
     gap: 32px;

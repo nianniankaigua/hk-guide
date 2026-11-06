@@ -1,9 +1,13 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { CHARMS, type Charm } from '../data/charms'
+import { useCharms } from '../composables/useCharms'
+import type { Charm } from '../types/charm'
 
 const router = useRouter()
+const { charms, loading, failed, loadCharms } = useCharms()
+
+onMounted(() => loadCharms())
 
 /** 与游戏内护符界面一致的 52 个格子（13 列 × 4 行） */
 const TOTAL_SLOTS = 52
@@ -17,7 +21,7 @@ function markBroken(charm: Charm) {
 }
 
 const slots = computed<(Charm | null)[]>(() => {
-  const list: (Charm | null)[] = [...CHARMS]
+  const list: (Charm | null)[] = [...charms.value]
   while (list.length < TOTAL_SLOTS) list.push(null)
   return list
 })
@@ -41,6 +45,16 @@ function hover(charm: Charm | null) {
       <p class="charmboard__hint">悬停查看，点击进入护符详情</p>
     </header>
 
+    <div v-if="loading" class="charmboard__status">
+      <p>正在读取护符图鉴…</p>
+    </div>
+
+    <div v-else-if="failed" class="charmboard__status">
+      <p>护符图鉴读取失败，确认后端已启动后重试。</p>
+      <button class="btn" type="button" @click="loadCharms(true)">重试</button>
+    </div>
+
+    <template v-else>
     <div class="charmboard__board">
       <div class="charmboard__grid">
         <button
@@ -86,10 +100,11 @@ function hover(charm: Charm | null) {
       <template v-else>
         <p class="charmboard__idle">
           <span class="charmboard__idle-mark">◈</span>
-          共 {{ CHARMS.length }} 枚护符 · 把光标放上去，这里会显示它的名字与效果
+          共 {{ charms.length }} 枚护符 · 把光标放上去，这里会显示它的名字与效果
         </p>
       </template>
     </div>
+    </template>
   </section>
 </template>
 
@@ -97,6 +112,18 @@ function hover(charm: Charm | null) {
 .charmboard {
   display: grid;
   gap: 18px;
+}
+
+.charmboard__status {
+  padding: 60px 0;
+  text-align: center;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+.charmboard__status .btn {
+  margin-top: 24px;
 }
 
 .charmboard__head {

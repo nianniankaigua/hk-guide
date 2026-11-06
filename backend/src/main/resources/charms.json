@@ -1,0 +1,660 @@
+[
+  {
+    "id": 1,
+    "slug": "wayward-compass",
+    "name": "任性的指南针",
+    "en": "Wayward Compass",
+    "notches": 1,
+    "effect": "打开地图时，在地图上标出你当前所在的位置。",
+    "lore": "当地图打开时，将其位置告诉佩戴者，允许漫游者进行精确定位。",
+    "location": "德特茅斯 · 伊塞尔达商店购买（遇到柯尼法后开卖）",
+    "notes": "开荒期最实用的一枚，地图一多就容易迷路，1 槽几乎不心疼。熟悉地图后可以换掉。",
+    "icon": "/charms/wayward-compass.webp"
+  },
+  {
+    "id": 2,
+    "slug": "gathering-swarm",
+    "name": "采集虫群",
+    "en": "Gathering Swarm",
+    "notches": 1,
+    "effect": "一群小虫会跟随你，自动拾取掉落的吉欧。",
+    "lore": "虫群将跟随持有者并收集任何散落的吉欧。适合那些无论多细小的东西都不愿意丢下的人。",
+    "location": "德特茅斯 · 斯莱商店购买",
+    "notes": "打群怪、刷吉欧时省事，但打 BOSS 时掉落的吉欧本来就不多，槽位吃紧可以先不带。",
+    "icon": "/charms/gathering-swarm.webp"
+  },
+  {
+    "id": 3,
+    "slug": "stalwart-shell",
+    "name": "坚硬外壳",
+    "en": "Stalwart Shell",
+    "notches": 2,
+    "effect": "受伤后的无敌时间延长，更容易脱离危险。",
+    "lore": "加强韧性。当从伤害中恢复时，延长持有者保持不受伤害的时间。使其更容易在危险情形下逃脱。",
+    "location": "德特茅斯 · 斯莱商店购买",
+    "notes": "新手打 BOSS 的保命符，配合快速凝聚可以在受击硬直里抢回一点血。",
+    "icon": "/charms/stalwart-shell.webp"
+  },
+  {
+    "id": 4,
+    "slug": "soul-catcher",
+    "name": "灵魂捕手",
+    "en": "Soul Catcher",
+    "notches": 2,
+    "effect": "骨钉命中敌人时获得更多灵魂。",
+    "lore": "萨满曾用它来从周围的世界中吸取更多灵魂。增加用骨钉攻击敌人时获得的灵魂数量。",
+    "location": "遗忘十字路 · 祖先之丘，长者巴德尔西侧",
+    "notes": "法术流的基础件，和噬魂者、萨满之石一起用，输出循环会顺很多。",
+    "icon": "/charms/soul-catcher.webp",
+    "synergy": [
+      "soul-eater"
+    ],
+    "synergyNote": "与噬魂者叠加，平砍回灵魂效率拉满。"
+  },
+  {
+    "id": 5,
+    "slug": "shaman-stone",
+    "name": "萨满之石",
+    "en": "Shaman Stone",
+    "notches": 3,
+    "effect": "提升所有法术的伤害。",
+    "lore": "据说包含前代萨满的学识。提高法术的威力，对敌人造成更多伤害。",
+    "location": "遗忘十字路 · 护符爱好者萨鲁巴购买",
+    "notes": "法术流的核心，复仇之魂、暗影之魂都会明显变强，3 槽物有所值。",
+    "icon": "/charms/shaman-stone.webp",
+    "synergy": [
+      "spell-twister"
+    ],
+    "synergyNote": "与法术扭曲者组成法术流标配，伤害与消耗一起解决。"
+  },
+  {
+    "id": 6,
+    "slug": "soul-eater",
+    "name": "噬魂者",
+    "en": "Soul Eater",
+    "notches": 4,
+    "effect": "大幅提升骨钉命中时获得的灵魂。",
+    "lore": "被遗忘的萨满神器，用来从活着的生物身上吸取灵魂。大大增加用骨钉攻击敌人时获得的灵魂数量。",
+    "location": "安息之地，需要强力下砸打破地面后进入",
+    "notes": "4 槽偏贵，但法术流一旦装上，几乎可以不停放法术。",
+    "icon": "/charms/soul-eater.webp",
+    "synergy": [
+      "soul-catcher"
+    ],
+    "synergyNote": "与灵魂捕手叠加，回灵魂效率极高。"
+  },
+  {
+    "id": 7,
+    "slug": "dashmaster",
+    "name": "冲刺大师",
+    "en": "Dashmaster",
+    "notches": 2,
+    "effect": "缩短冲刺的冷却时间，并允许向下冲刺。",
+    "lore": "有着被称为“冲刺大师”的古怪虫子形象。持有者将能够更频繁地冲刺，也能向下冲刺。非常适合那些想要快速移动的虫子。",
+    "location": "真菌荒地 · 螳螂村南侧（需要螳螂爪）",
+    "notes": "跑图神器，打 BOSS 时也能更快脱离攻击范围。",
+    "icon": "/charms/dashmaster.webp",
+    "synergy": [
+      "sprintmaster"
+    ],
+    "synergyNote": "与飞毛腿一起用，跑图速度提升非常明显。"
+  },
+  {
+    "id": 8,
+    "slug": "sprintmaster",
+    "name": "飞毛腿",
+    "en": "Sprintmaster",
+    "notches": 1,
+    "effect": "提升移动速度。",
+    "lore": "有着被称为“飞毛腿”的古怪虫子形象。增加持有者的奔跑速度，使其能避开危险或追上敌人。",
+    "location": "德特茅斯 · 斯莱商店购买（需要店主钥匙）",
+    "notes": "1 槽换全程提速，跑图党和钢魂都很常见的常驻选择。",
+    "icon": "/charms/sprintmaster.webp",
+    "synergy": [
+      "dashmaster",
+      "weaversong"
+    ],
+    "synergyNote": "与冲刺大师叠加提速；与编织者之歌一起时小蜘蛛也会跑得更快。"
+  },
+  {
+    "id": 9,
+    "slug": "grubsong",
+    "name": "幼虫之歌",
+    "en": "Grubsong",
+    "notches": 1,
+    "effect": "受伤时获得灵魂。",
+    "lore": "包含被解救的幼虫的感激。受到伤害时获得灵魂。",
+    "location": "遗忘十字路 · 幼虫之母（救出 10 只幼虫后赠予）",
+    "notes": "1 槽的稳定灵魂来源，钢魂、长线探索里性价比极高。",
+    "icon": "/charms/grubsong.webp",
+    "synergy": [
+      "grubberflys-elegy"
+    ],
+    "synergyNote": "与蜕变挽歌搭配，受伤后也能射出剑气。"
+  },
+  {
+    "id": 10,
+    "slug": "grubberflys-elegy",
+    "name": "蜕变挽歌",
+    "en": "Grubberfly's Elegy",
+    "notches": 3,
+    "effect": "满血时挥动骨钉会射出剑气，可远程攻击。",
+    "lore": "包含将要步入生命的下一个阶段的幼虫的感激。为武器灌输神圣的力量。当持有者处于满血状态时，能从骨钉中射出白热能量束。",
+    "location": "遗忘十字路 · 幼虫之母（救出全部幼虫后赠予）",
+    "notes": "满血才有剑气，一旦受伤就失效，适合打得干净的人。",
+    "icon": "/charms/grubberflys-elegy.webp",
+    "synergy": [
+      "grubsong"
+    ],
+    "synergyNote": "与幼虫之歌搭配，受伤后仍能靠灵魂维持输出。"
+  },
+  {
+    "id": 11,
+    "slug": "heavy-blow",
+    "name": "沉重之击",
+    "en": "Heavy Blow",
+    "notches": 2,
+    "effect": "骨钉的击退效果更强，能把敌人打得更远。",
+    "lore": "阵亡战士的骨钉形成。增加持有者骨钉的力量，使敌人在被击中时后退的距离更远。",
+    "location": "德特茅斯 · 斯莱商店购买（需要店主钥匙）",
+    "notes": "打大型敌人时容易把对方推到自己够不到的位置，一般不推荐常带。",
+    "icon": "/charms/heavy-blow.webp"
+  },
+  {
+    "id": 12,
+    "slug": "quick-slash",
+    "name": "快速劈砍",
+    "en": "Quick Slash",
+    "notches": 3,
+    "effect": "大幅提升骨钉的攻击速度。",
+    "lore": "诞生于那些被融合的不完美的废弃骨钉。允许持有者更快地挥砍骨钉。",
+    "location": "王国边缘 · 东南方的隐藏房间",
+    "notes": "物理流的核心之一，输出提升几乎和坚固力量同级别。",
+    "icon": "/charms/quick-slash.webp"
+  },
+  {
+    "id": 13,
+    "slug": "longnail",
+    "name": "修长之钉",
+    "en": "Longnail",
+    "notches": 2,
+    "effect": "小幅增加骨钉的攻击距离。",
+    "lore": "增加持有者骨钉的攻击范围，允许打击更远处的敌人。",
+    "location": "遗忘十字路 · 护符爱好者萨鲁巴购买",
+    "notes": "站得更远就更安全，和骄傲印记一起装可以叠出很长的攻击范围。",
+    "icon": "/charms/longnail.webp",
+    "synergy": [
+      "mark-of-pride"
+    ],
+    "synergyNote": "与骄傲印记叠加，攻击范围提升非常明显。"
+  },
+  {
+    "id": 14,
+    "slug": "mark-of-pride",
+    "name": "骄傲印记",
+    "en": "Mark of Pride",
+    "notches": 3,
+    "effect": "大幅增加骨钉的攻击距离。",
+    "lore": "由螳螂部落慷慨赠予他们尊敬的人。大大增加持有者骨钉的攻击范围，使其能够从更远处劈砍敌人。",
+    "location": "真菌荒地 · 螳螂村（击败螳螂领主后由螳螂族赠予）",
+    "notes": "近战流最值得的 3 槽之一，很多 BOSS 可以站在攻击范围外沿蹭刀。",
+    "icon": "/charms/mark-of-pride.webp",
+    "synergy": [
+      "longnail"
+    ],
+    "synergyNote": "与修长之钉叠加，攻击范围极长。"
+  },
+  {
+    "id": 15,
+    "slug": "fury-of-the-fallen",
+    "name": "亡者之怒",
+    "en": "Fury of the Fallen",
+    "notches": 2,
+    "effect": "只剩最后一格生命时，骨钉伤害大幅提升。",
+    "lore": "体现了那些将死之人的愤怒和英勇。当接近死亡时，持有者的力量会增加。",
+    "location": "德特茅斯 · 王之通道（需要骨钉跳）",
+    "notes": "钢魂和速通里翻盘用，普通玩法风险太高，不建议常带。",
+    "icon": "/charms/fury-of-the-fallen.webp"
+  },
+  {
+    "id": 16,
+    "slug": "thorns-of-agony",
+    "name": "苦痛荆棘",
+    "en": "Thorns of Agony",
+    "notches": 1,
+    "effect": "受伤时向四周射出荆棘，对附近敌人造成伤害。",
+    "lore": "感受持有者的痛苦并鞭打周围的世界。当受到伤害时，产生荆棘藤蔓伤害附近的敌人。",
+    "location": "苍绿之径（需要蛾翼披风后进入的隐藏区域）",
+    "notes": "1 槽的反伤，打喜欢撞人的小怪很舒服，BOSS 战里也能补一点伤害。",
+    "icon": "/charms/thorns-of-agony.webp"
+  },
+  {
+    "id": 17,
+    "slug": "baldur-shell",
+    "name": "巴德尔之壳",
+    "en": "Baldur Shell",
+    "notches": 2,
+    "effect": "聚焦时展开护壳，可抵挡数次伤害。",
+    "lore": "在凝聚灵魂时，产生硬壳保护它的持有者。外壳不是无法破坏的，吸收太多的伤害后将会破碎。",
+    "location": "呼啸悬崖西南方的隐藏区域",
+    "notes": "高压场景下的保命选择，但护壳被打破前无法继续回血，要算好次数。",
+    "icon": "/charms/baldur-shell.webp"
+  },
+  {
+    "id": 18,
+    "slug": "flukenest",
+    "name": "吸虫之巢",
+    "en": "Flukenest",
+    "notches": 3,
+    "effect": "复仇之魂变为一团吸虫，近距离伤害极高。",
+    "lore": "吸虫之母肠道诞生的活的护符。将复仇之魂法术变成一群不稳定的幼小吸虫。",
+    "location": "皇家水道（击败吸虫之母后获得）",
+    "notes": "贴脸放吸虫是所有法术里单发伤害最高的，配合萨满之石秒杀精英怪。",
+    "icon": "/charms/flukenest.webp",
+    "synergy": [
+      "defenders-crest"
+    ],
+    "synergyNote": "与防御者纹章搭配，吸虫会带上毒雾。"
+  },
+  {
+    "id": 19,
+    "slug": "defenders-crest",
+    "name": "防御者纹章",
+    "en": "Defender's Crest",
+    "notches": 1,
+    "effect": "散发腐臭孢子云，对周围敌人造成持续伤害。",
+    "lore": "圣巢国王赋予最忠诚的骑士的独特护符。虽然有些刮痕和污渍，但依旧保存得很好。让持有者散发出英勇的气息。",
+    "location": "皇家水道（击败粪球防御者后获得）",
+    "notes": "1 槽的被动伤害，还能强化蘑菇孢子与吸虫之巢，蘑菇流的核心。",
+    "icon": "/charms/defenders-crest.webp",
+    "synergy": [
+      "spore-shroom",
+      "flukenest",
+      "glowing-womb"
+    ],
+    "synergyNote": "与蘑菇孢子、吸虫之巢、发光子宫都有专属强化。"
+  },
+  {
+    "id": 20,
+    "slug": "glowing-womb",
+    "name": "发光子宫",
+    "en": "Glowing Womb",
+    "notches": 2,
+    "effect": "消耗灵魂孵化自爆幼虫，自动飞向敌人。",
+    "lore": "从持有者的身上汲取灵魂，用来产生幼崽。幼崽没有进食或成长的意愿，并会牺牲自己来保护它们的父母。",
+    "location": "遗忘十字路（需要水晶之心后进入的隐藏区域）",
+    "notes": "召唤流的一环，但会持续消耗灵魂，法术流慎用。",
+    "icon": "/charms/glowing-womb.webp",
+    "synergy": [
+      "defenders-crest"
+    ],
+    "synergyNote": "与防御者纹章搭配，幼虫自爆时额外产生毒云。"
+  },
+  {
+    "id": 21,
+    "slug": "quick-focus",
+    "name": "快速凝聚",
+    "en": "Quick Focus",
+    "notches": 3,
+    "effect": "大幅缩短聚焦（回血）所需时间。",
+    "lore": "包含水晶镜片的护符。提升灵魂的凝聚速度，让持有者更快地治愈伤口。",
+    "location": "遗忘十字路 · 护符爱好者萨鲁巴购买",
+    "notes": "容错率提升最直接的护符，BOSS 战里能把很多\"来不及回血\"变成来得及。",
+    "icon": "/charms/quick-focus.webp"
+  },
+  {
+    "id": 22,
+    "slug": "deep-focus",
+    "name": "深度凝聚",
+    "en": "Deep Focus",
+    "notches": 4,
+    "effect": "一次聚焦回复两格生命，但速度更慢。",
+    "lore": "在水晶内长时间自然形成。从周围的空气中吸取灵魂。持有者会以更慢的速度凝聚灵魂，但治疗效果会加倍。",
+    "location": "水晶山峰（需要水晶之心）",
+    "notes": "和快速凝聚配合时回血效率极高，单独用则太慢。",
+    "icon": "/charms/deep-focus.webp",
+    "synergy": [
+      "quick-focus"
+    ],
+    "synergyNote": "与快速凝聚一起用，回血速度与数量兼顾。"
+  },
+  {
+    "id": 23,
+    "slug": "lifeblood-heart",
+    "name": "生命血之心",
+    "en": "Lifeblood Heart",
+    "notches": 2,
+    "effect": "在长椅休息后额外获得 2 格生命血。",
+    "lore": "包含一个活着的核心，浸出宝贵的生命血。休息时，持有者被生命血包裹，可以防止少量伤害。",
+    "location": "遗忘十字路 · 护符爱好者萨鲁巴购买",
+    "notes": "一次性护盾，死了不会补充，适合打一次性的 BOSS 挑战。",
+    "icon": "/charms/lifeblood-heart.webp",
+    "synergy": [
+      "lifeblood-core",
+      "jonis-blessing"
+    ],
+    "synergyNote": "与生命血核心、乔尼的祝福叠加，可堆出大量生命血。"
+  },
+  {
+    "id": 24,
+    "slug": "lifeblood-core",
+    "name": "生命血核心",
+    "en": "Lifeblood Core",
+    "notches": 3,
+    "effect": "在长椅休息后额外获得 4 格生命血。",
+    "lore": "包含一个活着的核心，流出宝贵的生命血。休息时，持有者被生命血包裹，可以防止大量伤害。",
+    "location": "深渊西部（需要携带 15 格生命血才能开启）",
+    "notes": "生命血流的支点，和乔尼的祝福搭配能把血量堆到非常夸张。",
+    "icon": "/charms/lifeblood-core.webp",
+    "synergy": [
+      "lifeblood-heart",
+      "jonis-blessing"
+    ],
+    "synergyNote": "与生命血之心、乔尼的祝福叠加。"
+  },
+  {
+    "id": 25,
+    "slug": "jonis-blessing",
+    "name": "乔尼的祝福",
+    "en": "Joni's Blessing",
+    "notches": 4,
+    "effect": "所有生命转为生命血，无法通过聚焦回血，但生命上限大幅提升。",
+    "lore": "由仁慈的异教徒乔尼给予的祝福，将生命流体变成蓝色的生命血。持有者将拥有一个更健康的外壳，可以承受更多的伤害，但不能够通过凝聚灵魂自愈。",
+    "location": "呼啸悬崖 · 乔尼之憩",
+    "notes": "生命血 + 快速凝聚流的核心，代价是彻底放弃回血。",
+    "icon": "/charms/jonis-blessing.webp",
+    "synergy": [
+      "lifeblood-heart",
+      "lifeblood-core"
+    ],
+    "synergyNote": "与生命血系列叠加，生命血总量极高。"
+  },
+  {
+    "id": 26,
+    "slug": "hiveblood",
+    "name": "蜂巢之血",
+    "en": "Hiveblood",
+    "notches": 4,
+    "effect": "静止一段时间后，自动回复最后失去的那格生命。",
+    "lore": "蜂巢中珍贵的金色硬化花蜜块。随时间修复持有者的伤口，使其回复生命值而不需凝聚灵魂。",
+    "location": "蜂巢（击败蜂巢骑士后获得）",
+    "notes": "探索与钢魂的续航神器，节奏慢但几乎不用回血。",
+    "icon": "/charms/hiveblood.webp"
+  },
+  {
+    "id": 27,
+    "slug": "spore-shroom",
+    "name": "蘑菇孢子",
+    "en": "Spore Shroom",
+    "notches": 1,
+    "effect": "聚焦时释放孢子云，对周围敌人造成持续伤害。",
+    "lore": "由活的真菌物质组成。当暴露于灵魂之下时，能散发出孢子。当凝聚灵魂时，发射孢子云，缓慢伤害敌人。",
+    "location": "真菌荒地（需要螳螂爪）",
+    "notes": "1 槽的被动输出，和防御者纹章搭配时毒云范围与伤害都会提升。",
+    "icon": "/charms/spore-shroom.webp",
+    "synergy": [
+      "defenders-crest"
+    ],
+    "synergyNote": "与防御者纹章搭配，孢子云变成毒云。"
+  },
+  {
+    "id": 28,
+    "slug": "sharp-shadow",
+    "name": "锋利之影",
+    "en": "Sharp Shadow",
+    "notches": 2,
+    "effect": "暗影冲刺距离更长，并能对穿过的敌人造成伤害。",
+    "lore": "含有被禁用的法术，能将影子转换为致命的武器。当使用暗影冲刺时，持有者的身体会变得锋利，并伤害敌人。",
+    "location": "深巢东南（需要暗影披风）",
+    "notes": "进攻性冲刺，打 BOSS 时可以用冲刺当一刀，但距离变长容易冲过头。",
+    "icon": "/charms/sharp-shadow.webp"
+  },
+  {
+    "id": 29,
+    "slug": "shape-of-unn",
+    "name": "乌恩之形",
+    "en": "Shape of Unn",
+    "notches": 2,
+    "effect": "聚焦时变成蜗牛形态，可以缓慢移动。",
+    "lore": "让持有者展现出内在的乌恩形态。当凝聚灵魂时，持有者将展现出新的外形，并可以自由移动以避开敌人。",
+    "location": "苍绿之径 · 乌恩之湖（需要伊思玛的眼泪）",
+    "notes": "躲招回血的组合件，和快速凝聚一起用才能显出价值。",
+    "icon": "/charms/shape-of-unn.webp",
+    "synergy": [
+      "quick-focus"
+    ],
+    "synergyNote": "与快速凝聚搭配，边移动边快速回血。"
+  },
+  {
+    "id": 30,
+    "slug": "nailmasters-glory",
+    "name": "骨钉大师的荣耀",
+    "en": "Nailmaster's Glory",
+    "notches": 1,
+    "effect": "大幅缩短蓄力斩的蓄力时间。",
+    "lore": "包含一个骨钉大师的激情、技能和遗憾。提高持有者对骨钉技艺的掌握，使其更快地集中力量并释放技艺。",
+    "location": "德特茅斯 · 斯莱（学会三种骨钉技艺后赠予）",
+    "notes": "1 槽就能让蓄力斩变成常用招式，清场效率提升明显。",
+    "icon": "/charms/nailmasters-glory.webp"
+  },
+  {
+    "id": 31,
+    "slug": "weaversong",
+    "name": "编织者之歌",
+    "en": "Weaversong",
+    "notches": 2,
+    "effect": "召唤三只编织者小蜘蛛跟随并攻击敌人。",
+    "lore": "一个缠丝的护符，蕴含着那些离开圣巢返回家乡的编织者所留下的离别之歌。生成编织者幼体，陪伴并保护孤独寂寞的持有者。",
+    "location": "深巢 · 编织者巢穴",
+    "notes": "召唤流的基础，配合飞毛腿小蜘蛛移动更快，输出更稳。",
+    "icon": "/charms/weaversong.webp",
+    "synergy": [
+      "sprintmaster"
+    ],
+    "synergyNote": "与飞毛腿搭配，编织者移动与追击更快。"
+  },
+  {
+    "id": 32,
+    "slug": "dream-wielder",
+    "name": "舞梦者",
+    "en": "Dream Wielder",
+    "notches": 1,
+    "effect": "梦之钉蓄力更快，命中时获得更多灵魂。",
+    "lore": "专门给挥动梦之钉和收集精华的人准备的临时护符。允许持有者更快地对梦之钉充能，并在击中敌人时收集更多灵魂。",
+    "location": "安息之地 · 先知（给予 500 梦境精华后）",
+    "notes": "刷梦境精华和打梦境 BOSS 必备，平时也可以靠梦之钉回灵魂。",
+    "icon": "/charms/dream-wielder.webp"
+  },
+  {
+    "id": 33,
+    "slug": "dreamshield",
+    "name": "梦之盾",
+    "en": "Dreamshield",
+    "notches": 3,
+    "effect": "一面护盾围绕你旋转，格挡敌方攻击并造成少量伤害。",
+    "lore": "曾经被一个能塑造梦境的部落所使用的防御性护符。召唤出一面跟随持有者的盾牌，试图使其受到保护。",
+    "location": "安息之地东部，先知南侧的隐藏区域",
+    "notes": "被动防御，但格挡后需要时间恢复，3 槽略显昂贵。",
+    "icon": "/charms/dreamshield.webp"
+  },
+  {
+    "id": 34,
+    "slug": "grimmchild",
+    "name": "格林之子",
+    "en": "Grimmchild",
+    "notches": 2,
+    "effect": "召唤幼年格林跟随，自动向敌人喷射火焰。",
+    "lore": "参与格林剧团的仪式需要佩戴的护符。持有者需要寻找格林亲族并收集它们的火焰。尚未收集的火焰将会标记在持有者的地图上。",
+    "location": "德特茅斯 · 格林剧团（收集全部火焰后获得）",
+    "notes": "被动输出很省心，和无忧旋律互斥（同一个任务线只能拿一个）。",
+    "icon": "/charms/grimmchild.webp"
+  },
+  {
+    "id": 35,
+    "slug": "carefree-melody",
+    "name": "无忧旋律",
+    "en": "Carefree Melody",
+    "notches": 3,
+    "effect": "累积受击次数后，有概率完全免疫一次伤害。",
+    "lore": "纪念一份友谊建立的信物。包含一首可能使持有者免受伤害的守护之歌。",
+    "location": "德特茅斯（放逐格林剧团后，找尼姆获得）",
+    "notes": "钢魂和长线挑战的保险，与格林之子互斥。",
+    "icon": "/charms/carefree-melody.webp"
+  },
+  {
+    "id": 36,
+    "slug": "kingsoul",
+    "name": "国王之魂",
+    "en": "Kingsoul",
+    "notches": 5,
+    "effect": "缓慢地自动回复灵魂，无需命中敌人。",
+    "lore": "象征着高等生灵相互结合的圣洁护符。持有者能慢慢吸收其中无限的灵魂。能打开通往出生地的道路。",
+    "location": "王后花园的白王后 + 白王宫殿的白王，两半合成",
+    "notes": "5 槽换来被动回灵魂，强度一般，更多是通往真结局的钥匙。",
+    "icon": "/charms/kingsoul.webp",
+    "synergy": [
+      "void-heart"
+    ],
+    "synergyNote": "持有国王之魂并在深渊转化为虚空之心后，国王之魂会被替换。"
+  },
+  {
+    "id": 37,
+    "slug": "void-heart",
+    "name": "虚空之心",
+    "en": "Void Heart",
+    "notches": 0,
+    "effect": "不再被虚空侵蚀，并与圣巢的过去产生共鸣。",
+    "lore": "隐藏在内部的空虚，现在不再受到约束。使虚空在持有者的意志下联合起来。这个护符是持有者的一部分，不能卸下。",
+    "location": "深渊 · 出生地（持有国王之魂后转化）",
+    "notes": "0 槽常驻，解锁真结局的必要条件，不占位置的免费强化。",
+    "icon": "/charms/void-heart.webp",
+    "synergy": [
+      "kingsoul"
+    ],
+    "synergyNote": "由国王之魂转化而来，两者不会同时存在。"
+  },
+  {
+    "id": 38,
+    "slug": "fragile-heart",
+    "name": "易碎心脏",
+    "en": "Fragile Heart",
+    "notches": 2,
+    "effect": "生命上限 +2，但死亡后会碎裂。",
+    "lore": "增加持有者的生命值，承受更多伤害。这个护符十分脆弱，如果它的持有者被杀死就会损坏。",
+    "location": "真菌荒地 · 断腿商人（购买）",
+    "notes": "死亡就碎，钢魂请在迪万处升级成坚固心脏后再用。",
+    "icon": "/charms/fragile-heart.webp",
+    "synergy": [
+      "unbreakable-heart"
+    ],
+    "synergyNote": "可在迪万处升级为坚固心脏，升级后不再碎裂。"
+  },
+  {
+    "id": 39,
+    "slug": "unbreakable-heart",
+    "name": "坚固心脏",
+    "en": "Unbreakable Heart",
+    "notches": 2,
+    "effect": "生命上限 +2，死亡后不会碎裂。",
+    "lore": "增加持有者的生命值，承受更多伤害。这个护符很坚固，不会破碎。",
+    "location": "德特茅斯 · 迪万（将易碎心脏升级）",
+    "notes": "两格血的常驻提升，高压战斗里非常稳。",
+    "icon": "/charms/unbreakable-heart.webp",
+    "synergy": [
+      "fragile-heart"
+    ],
+    "synergyNote": "由易碎心脏升级而来。"
+  },
+  {
+    "id": 40,
+    "slug": "fragile-greed",
+    "name": "易碎贪婪",
+    "en": "Fragile Greed",
+    "notches": 2,
+    "effect": "击杀敌人获得的吉欧增加，死亡后碎裂。",
+    "lore": "使得持有者在击败敌人时能找到更多的吉欧。这个护符十分脆弱，如果它的持有者被杀死就会损坏。",
+    "location": "真菌荒地 · 断腿商人（购买）",
+    "notes": "刷钱用，探索和打 BOSS 时不建议带，死亡后还得重新买。",
+    "icon": "/charms/fragile-greed.webp",
+    "synergy": [
+      "unbreakable-greed"
+    ],
+    "synergyNote": "可在迪万处升级为坚固贪婪。"
+  },
+  {
+    "id": 41,
+    "slug": "unbreakable-greed",
+    "name": "坚固贪婪",
+    "en": "Unbreakable Greed",
+    "notches": 2,
+    "effect": "击杀敌人获得的吉欧增加，死亡后不会碎裂。",
+    "lore": "使得持有者在击败敌人时能找到更多的吉欧。这个护符很坚固，不会破碎。",
+    "location": "德特茅斯 · 迪万（将易碎贪婪升级）",
+    "notes": "长期刷钱首选，吉欧收益提升非常直观。",
+    "icon": "/charms/unbreakable-greed.webp",
+    "synergy": [
+      "fragile-greed"
+    ],
+    "synergyNote": "由易碎贪婪升级而来。"
+  },
+  {
+    "id": 42,
+    "slug": "fragile-strength",
+    "name": "易碎力量",
+    "en": "Fragile Strength",
+    "notches": 3,
+    "effect": "骨钉伤害大幅提升，死亡后碎裂。",
+    "lore": "增强持有者的攻击力，使其骨钉能够对敌人造成更多伤害。这个护符十分脆弱，如果它的持有者被杀死就会损坏。",
+    "location": "真菌荒地 · 断腿商人（购买）",
+    "notes": "性价比极高的输出件，但死亡即碎，升级成坚固力量后再长期使用。",
+    "icon": "/charms/fragile-strength.webp",
+    "synergy": [
+      "unbreakable-strength"
+    ],
+    "synergyNote": "可在迪万处升级为坚固力量。"
+  },
+  {
+    "id": 43,
+    "slug": "unbreakable-strength",
+    "name": "坚固力量",
+    "en": "Unbreakable Strength",
+    "notches": 3,
+    "effect": "骨钉伤害大幅提升，死亡后不会碎裂。",
+    "lore": "增强持有者的攻击力，使其骨钉能够对敌人造成更多伤害。这个护符很坚固，不会破碎。",
+    "location": "德特茅斯 · 迪万（将易碎力量升级）",
+    "notes": "物理流的核心，几乎所有近战配装都会优先装它。",
+    "icon": "/charms/unbreakable-strength.webp",
+    "synergy": [
+      "fragile-strength"
+    ],
+    "synergyNote": "由易碎力量升级而来。"
+  },
+  {
+    "id": 44,
+    "slug": "spell-twister",
+    "name": "法术扭曲者",
+    "en": "Spell Twister",
+    "notches": 2,
+    "effect": "降低释放法术所需的灵魂消耗。",
+    "lore": "反映了灵魂圣所掌握灵魂力量的欲望，可以提高持有者的施法能力。减少法术的灵魂消耗。",
+    "location": "泪水之城 · 灵魂圣所东北侧",
+    "notes": "法术流的另一块拼图，和萨满之石一起装才算完整。",
+    "icon": "/charms/spell-twister.webp",
+    "synergy": [
+      "shaman-stone"
+    ],
+    "synergyNote": "与萨满之石搭配，法术伤害与消耗同时优化。"
+  },
+  {
+    "id": 45,
+    "slug": "steady-body",
+    "name": "稳定之体",
+    "en": "Steady Body",
+    "notches": 1,
+    "effect": "攻击敌人时不再被击退。",
+    "lore": "防止持有者用骨钉劈砍敌人时产生后坐力。让人保持稳定，持续攻击。",
+    "location": "遗忘十字路 · 护符爱好者萨鲁巴购买",
+    "notes": "贴脸输出时很舒服，尤其是站在平台边缘打怪。",
+    "icon": "/charms/steady-body.webp"
+  }
+]

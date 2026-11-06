@@ -1,20 +1,40 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { CHARM_BY_SLUG, CHARMS } from '../data/charms'
+import { useCharms } from '../composables/useCharms'
+import type { Charm } from '../types/charm'
 
 const route = useRoute()
+const { charms, loading, loaded, failed, loadCharms } = useCharms()
 
-const charm = computed(() => CHARM_BY_SLUG[String(route.params.slug)])
-const index = computed(() => (charm.value ? CHARMS.findIndex((item) => item.slug === charm.value!.slug) : -1))
+onMounted(() => loadCharms())
+
+const charm = computed(
+  () => charms.value.find((item) => item.slug === String(route.params.slug)) ?? null,
+)
+
+const status = computed<'loading' | 'ok' | 'notfound' | 'failed'>(() => {
+  if (charm.value) return 'ok'
+  if (failed.value) return 'failed'
+  if (loading.value || !loaded.value) return 'loading'
+  return 'notfound'
+})
+
+const index = computed(() =>
+  charm.value ? charms.value.findIndex((item) => item.slug === charm.value!.slug) : -1,
+)
 
 const synergies = computed(() => {
   const list = charm.value?.synergy ?? []
-  return list.map((slug) => CHARM_BY_SLUG[slug]).filter(Boolean)
+  return list
+    .map((slug) => charms.value.find((item) => item.slug === slug))
+    .filter((item): item is Charm => !!item)
 })
 
-const previous = computed(() => (index.value > 0 ? CHARMS[index.value - 1] : null))
-const next = computed(() => (index.value >= 0 && index.value < CHARMS.length - 1 ? CHARMS[index.value + 1] : null))
+const previous = computed(() => (index.value > 0 ? charms.value[index.value - 1] : null))
+const next = computed(() =>
+  index.value >= 0 && index.value < charms.value.length - 1 ? charms.value[index.value + 1] : null,
+)
 
 /** 图标缺失时的兜底 */
 const broken = ref<Record<string, boolean>>({})
@@ -24,7 +44,17 @@ function markBroken(slug: string) {
 </script>
 
 <template>
-  <div class="charm">
+  <div v-if="status === 'loading'" class="charm-state container">
+    <p class="charm-state__text">正在读取图鉴…</p>
+  </div>
+
+  <div v-else-if="status === 'failed'" class="charm-state container">
+    <span class="charm-state__char">!</span>
+    <p class="charm-state__text">护符图鉴读取失败，确认后端已启动后重试。</p>
+    <button class="btn btn--solid" type="button" @click="loadCharms(true)">重试</button>
+  </div>
+
+  <div v-else class="charm">
     <div class="container">
       <RouterLink to="/guides?category=charm" class="charm__back">← 返回护符图鉴</RouterLink>
 
@@ -117,6 +147,29 @@ function markBroken(slug: string) {
 </template>
 
 <style scoped>
+.charm-state {
+  padding-block: 130px;
+  text-align: center;
+}
+
+.charm-state__char {
+  font-family: var(--font-display);
+  font-size: 110px;
+  line-height: 1;
+  color: rgba(233, 240, 236, 0.07);
+}
+
+.charm-state__text {
+  margin-top: 22px;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.charm-state .btn {
+  margin-top: 30px;
+}
+
 .charm {
   padding: 40px 0 96px;
 }
